@@ -2,6 +2,7 @@
 // http://localhost:3000/isolated/exercise/06.js
 
 import * as React from 'react'
+import {ErrorBoundary} from 'react-error-boundary'
 import {
   fetchPokemon,
   PokemonInfoFallback,
@@ -9,20 +10,20 @@ import {
   PokemonForm,
 } from '../pokemon'
 
-class ErrorBoundry extends React.Component {
-  state = {error: false}
-  static getDerivedStateFromError(error) {
-    return {error}
-  }
+// class ErrorBoundry extends React.Component {
+//   state = {error: false}
+//   static getDerivedStateFromError(error) {
+//     return {error}
+//   }
 
-  render() {
-    const {error} = this.state
-    if (error) {
-      return <this.props.FallbackComponent error={error} />
-    }
-    return this.props.children
-  }
-}
+//   render() {
+//     const {error} = this.state
+//     if (error) {
+//       return <this.props.FallbackComponent error={error} />
+//     }
+//     return this.props.children
+//   }
+// }
 
 function PokemonInfo({pokemonName}) {
   const [{status, pokemon, error}, setState] = React.useState({
@@ -79,9 +80,9 @@ function App() {
       <PokemonForm pokemonName={pokemonName} onSubmit={handleSubmit} />
       <hr />
       <div className="pokemon-info">
-        <ErrorBoundry key={pokemonName} FallbackComponent={ErrorFallback}>
+        <ErrorBoundary key={pokemonName} FallbackComponent={ErrorFallback}>
           <PokemonInfo pokemonName={pokemonName} />
-        </ErrorBoundry>
+        </ErrorBoundary>
       </div>
     </div>
   )
