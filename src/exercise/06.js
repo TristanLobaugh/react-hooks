@@ -10,24 +10,9 @@ import {
   PokemonForm,
 } from '../pokemon'
 
-// class ErrorBoundry extends React.Component {
-//   state = {error: false}
-//   static getDerivedStateFromError(error) {
-//     return {error}
-//   }
-
-//   render() {
-//     const {error} = this.state
-//     if (error) {
-//       return <this.props.FallbackComponent error={error} />
-//     }
-//     return this.props.children
-//   }
-// }
-
 function PokemonInfo({pokemonName}) {
   const [{status, pokemon, error}, setState] = React.useState({
-    status: 'idle',
+    status: pokemonName ? 'pending' : 'idle',
     pokemon: null,
     error: null,
   })
@@ -59,11 +44,14 @@ function PokemonInfo({pokemonName}) {
   throw new Error('This should be impossible')
 }
 
-function ErrorFallback({error}) {
+function ErrorFallback({error, resetErrorBoundary}) {
   return (
     <div role="alert">
       There was an error:{' '}
       <pre style={{whiteSpace: 'normal'}}>{error.message}</pre>
+      <button type="submit" onClick={resetErrorBoundary}>
+        Try Again
+      </button>
     </div>
   )
 }
@@ -80,7 +68,12 @@ function App() {
       <PokemonForm pokemonName={pokemonName} onSubmit={handleSubmit} />
       <hr />
       <div className="pokemon-info">
-        <ErrorBoundary key={pokemonName} FallbackComponent={ErrorFallback}>
+        <ErrorBoundary
+          onReset={() => {
+            setPokemonName('')
+          }}
+          FallbackComponent={ErrorFallback}
+        >
           <PokemonInfo pokemonName={pokemonName} />
         </ErrorBoundary>
       </div>
