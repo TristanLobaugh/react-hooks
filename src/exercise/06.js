@@ -69,6 +69,7 @@ function App() {
       <hr />
       <div className="pokemon-info">
         <ErrorBoundary
+          resetKeys={[pokemonName]}
           onReset={() => {
             setPokemonName('')
           }}
